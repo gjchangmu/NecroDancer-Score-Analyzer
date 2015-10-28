@@ -128,8 +128,8 @@ namespace WindowsFormsApplication1
 				ret = ReadProcessMemory(processHandle, (IntPtr)((int)baseaddress + 0x10002), checkbuff, 4, ref rn);
 				if (BitConverter.ToInt32(checkbuff, 0) != 0x44C7D08B)
 					unknownversion = true;
-				ret = ReadProcessMemory(processHandle, (IntPtr)((int)baseaddress + 0x1A14C9), checkbuff, 4, ref rn);
-				if (BitConverter.ToInt32(checkbuff, 0) != 0x1FDF8868)
+				ret = ReadProcessMemory(processHandle, (IntPtr)((int)baseaddress + 0x1A14C5), checkbuff, 4, ref rn);
+				if (BitConverter.ToInt32(checkbuff, 0) != 0x08418D50)
 					unknownversion = true;
 				ret = ReadProcessMemory(processHandle, (IntPtr)((int)baseaddress + 0x27DF92), checkbuff, 4, ref rn);
 				if (BitConverter.ToInt32(checkbuff, 0) != 0x006F0063)
