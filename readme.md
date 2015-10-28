@@ -1,6 +1,8 @@
 ###Introduction
 NecroDancer Score Analyzer is a trainer for a video game named Crypt of the NecroDancer. It counts the amount of gold/score by different sources (gold from bosses, gold from non-boss monsters, gold from golden shop walls, penalty by crown of greed, etc.). This trainer helps me understand my score better.
 
+This is in beta state and any kind of suggestions are welcome.
+
 ###How to use
 Run the analyzer side by side with the game. 
 
@@ -16,10 +18,15 @@ The numbers are not 100% accurate, however they should be good estimates, especi
 
 Why the numbers are not accurate? The main reason is that, most of the gold goes through two steps to end up into your score counter: firstly it spawns and lies on the ground, and secondly it is collected by you when you step onto it. The analyzer does not know where a pile of gold comes from when you are collecting it, so in order to analyze the sources of gold it count gold when the gold spawns. And when doing in this way, the analyzer does not know whether you will collect all the gold that have spawned, so it basicly assumes that you will collect all of them. 
 
+###Is it a cheat?
+No, the analyzer does not do any kind of cheat. I believe that your runs should be totally legit while the analyzer is running, as the only thing the analyzer does is counting your gold. However as the analyzer do modify the game memory, I can only say that I'm 90% sure that it causes no side-effect to the game, because you will never be sure of program behavious.
+
+One thing that concerns me now is that, the analyzer show the amount of gold in hidden rooms in current level right after you enter the level, assuming that you will collect them. So if you look at the analyzer right after you enter a new level, you will know whether there is gold in hidden rooms in the level. By now I haven't figured out a way to remove this other than hidding the information. Luckily this is a very trival thing, so trival that I believe players won't ever benifit from it, so I didn't hide it.
+
 ###How it is made
 1. A cheat table used in Cheat Engine that do the exactly same thing is made.
 2. While the cheat table is set in effect, I use memreader to read the modified game memory and save the data to two .bin files.
 3. The main program reads the two .bin files and writes the data into game memory, so that Cheat Engine is not needed any more.
 All the related codes (the cheat table, memreader and the main program) are included in the source code if anyone would want to check.
 
-gjchangmu
+gjchangmu (gujianjiayi4@126.com)
