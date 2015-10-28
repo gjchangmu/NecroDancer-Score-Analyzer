@@ -1,0 +1,11 @@
+memreader/bin
+memreader/obj
+analyzer/analyzer/obj
+
+*.pdb
+*.exp
+*.sdf
+*.suo
+*.opensdf
+*.lnk
+*vshost.exe*

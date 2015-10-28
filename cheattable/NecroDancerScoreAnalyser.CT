@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="18">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>14</ID>
+      <Description>"Disable Replay Speed Limit"</Description>
+      <LastState Activated="0"/>
+      <Color>80000008</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+necrodancer.exe+EBCEB:
+nop
+nop
+nop
+nop
+nop
+
+[disable]
+necrodancer.exe+EBCEB:
+db 0F 2F C8 76 0D
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>0</ID>
+      <Description>"Start"</Description>
+      <LastState Activated="0"/>
+      <Color>80000008</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+alloc(storage, 2048)
+registersymbol(storage)
+//label(thread)
+//label(threadend)
+//registersymbol(threadend)
+label(newgame_newmem)
+label(boss_newmem)
+label(foes_newmem)
+label(giantfoes_newmem)
+label(goldenwalls_newmem)
+label(goldendirt_newmem)
+label(lying_newmem)
+label(lying1_newmem)
+label(lying4_newmem)
+label(crate_newmem)
+label(leprechaun_newmem)
+label(leprechaun2_newmem)
+label(pawnbroker_newmem)
+label(penalty_newmem)
+label(expense_newmem)
+label(expense2_newmem)
+label(expense3_newmem)
+label(leprechaunspawn_newmem)
+label(richs_newmem)
+
+
+"NecroDancer.exe"+146F44:
+dd storage
+
+
+storage:
+dd 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+
+//thread:
+//mov eax, 0
+//add eax, [storage]
+//add eax, [storage+04]
+//add eax, [storage+08]
+//add eax, [storage+0C]
+//add eax, [storage+10]
+//add eax, [storage+14]
+//add eax, [storage+18]
+//add eax, [storage+1C]
+//add eax, [storage+24]
+//add eax, [storage+28]
+//add eax, [storage+2C]
+//mov [storage+34], eax
+//push #50
+//call sleep
+//cmp [threadend], 1
+//jne thread
+//ret
+//threadend:
+//dd 0
+//CREATETHREAD(thread);
+
+
+label(newgame_returnhere)
+label(newgame_originalcode)
+label(newgame_exit)
+newgame_newmem:
+mov [storage], 0
+mov [storage+4], 0
+mov [storage+8], 0
+mov [storage+C], 0
+mov [storage+10], 0
+mov [storage+14], 0
+mov [storage+18], 0
+mov [storage+1C], 0
+mov [storage+20], 0
+mov [storage+24], 0
+mov [storage+28], 0
+mov [storage+2C], 0
+mov [storage+30], 0
+mov [storage+34], 0
+newgame_originalcode:
+call NecroDancer.exe+7DFC0
+newgame_exit:
+jmp newgame_returnhere
+
+
+label(boss_returnhere)
+label(boss_originalcode)
+label(boss_if)
+label(boss_exit)
+boss_newmem:
+pop [storage+30]
+push [storage+30]
+push eax
+mov eax, [storage+30]
+add [storage], eax
+cmp [storage+20], 0
+je boss_if
+add [storage], eax
+boss_if:
+pop eax
+boss_originalcode:
+push 00
+push ecx
+mov ecx,esp
+boss_exit:
+jmp boss_returnhere
+
+
+label(foes_returnhere)
+label(foes_originalcode)
+label(foes_exit)
+foes_newmem:
+add [storage+4], esi
+cmp [storage+20], 0
+je foes_originalcode
+add [storage+4], esi
+foes_originalcode:
+push ebp
+mov ebp,esp
+push ebx
+push esi
+foes_exit:
+jmp foes_returnhere
+
+
+label(giantfoes_returnhere)
+label(giantfoes_originalcode)
+label(giantfoes_exit)
+giantfoes_newmem:
+add [storage+4], 48
+cmp [storage+20], 0
+je giantfoes_originalcode
+add [storage+4], 48
+giantfoes_originalcode:
+call NecroDancer.exe+133060
+giantfoes_exit:
+jmp giantfoes_returnhere
+
+
+label(goldenwalls_returnhere)
+label(goldenwalls_originalcode)
+label(goldenwalls_exit)
+goldenwalls_newmem:
+add [storage+8], 0A
+cmp [storage+20], 0
+je goldenwalls_originalcode
+add [storage+8], 0A
+goldenwalls_originalcode:
+call NecroDancer.exe+133060
+goldenwalls_exit:
+jmp goldenwalls_returnhere
+
+
+label(goldendirt_returnhere)
+label(goldendirt_originalcode)
+label(goldendirt_exit)
+goldendirt_newmem:
+add [storage+0C], 19
+cmp [storage+20], 0
+je goldendirt_originalcode
+add [storage+0C], 19
+goldendirt_originalcode:
+call NecroDancer.exe+133060
+goldendirt_exit:
+jmp goldendirt_returnhere
+
+
+label(lying_returnhere)
+label(lying_originalcode)
+label(lying_exit)
+lying_newmem:
+add [storage+10], eax
+cmp [storage+20], 0
+je lying_originalcode
+add [storage+10], eax
+lying_originalcode:
+push 00
+push ecx
+mov ecx,esp
+lying_exit:
+jmp lying_returnhere
+
+
+label(lying1_returnhere)
+label(lying1_originalcode)
+label(lying1_exit)
+lying1_newmem:
+add [storage+10], eax
+cmp [storage+20], 0
+je lying1_originalcode
+add [storage+10], eax
+lying1_originalcode:
+push 00
+push ecx
+mov ecx,esp
+lying1_exit:
+jmp lying1_returnhere
+
+
+label(lying4_returnhere)
+label(lying4_originalcode)
+label(lying4_exit)
+lying4_newmem:
+add [storage+10], 2D
+cmp [storage+20], 0
+je lying4_originalcode
+add [storage+10], 2D
+lying4_originalcode:
+push 00
+push ecx
+mov ecx,esp
+lying4_exit:
+jmp lying4_returnhere
+
+
+label(crate_originalcode)
+crate_newmem:
+pop eax
+add [storage+14], 0A
+cmp [storage+20], 0
+je crate_originalcode
+add [storage+14], 0A
+crate_originalcode:
+push NecroDancer.exe+2861C4
+push eax
+ret
+
+
+label(leprechaun_returnhere)
+label(leprechaun_originalcode)
+label(leprechaun_exit)
+leprechaun_newmem:
+add [storage+18], 19
+cmp [storage+20], 0
+je leprechaun_originalcode
+add [storage+18], 19
+leprechaun_originalcode:
+call NecroDancer.exe+133060
+leprechaun_exit:
+jmp leprechaun_returnhere
+
+
+label(leprechaun2_returnhere)
+label(leprechaun2_originalcode)
+label(leprechaun2_exit)
+leprechaun2_newmem:
+add [storage+18], 64
+cmp [storage+20], 0
+je leprechaun2_originalcode
+add [storage+18], 64
+leprechaun2_originalcode:
+call NecroDancer.exe+133060
+leprechaun2_exit:
+jmp leprechaun2_returnhere
+
+
+label(pawnbroker_returnhere)
+label(pawnbroker_originalcode)
+label(pawnbroker_exit)
+label(pawnbroker_if)
+pawnbroker_newmem:
+push eax
+imul eax, [NecroDancer.exe+2F814C], 64
+add [storage+1C], eax
+sub [storage+04], eax
+cmp [storage+20], 0
+je pawnbroker_if
+add [storage+1C], eax
+sub [storage+04], eax
+pawnbroker_if:
+pop eax
+pawnbroker_originalcode:
+call NecroDancer.exe+147410
+pawnbroker_exit:
+jmp pawnbroker_returnhere
+
+
+label(penalty_returnhere)
+label(penalty_originalcode)
+label(penalty_exit)
+penalty_newmem:
+dec [storage+24]
+mov [storage+20], 1
+penalty_originalcode:
+call NecroDancer.exe+103BB0
+penalty_exit:
+jmp penalty_returnhere
+
+
+label(expense_returnhere)
+label(expense_originalcode)
+label(expense_exit)
+expense_newmem:
+add [storage+28], ecx
+expense_originalcode:
+add ecx,[NecroDancer.exe+2F81E0]
+expense_exit:
+jmp expense_returnhere
+
+
+label(expense2_returnhere)
+label(expense2_originalcode)
+label(expense2_exit)
+expense2_newmem:
+add [storage+28], ecx
+expense2_originalcode:
+add ecx,[NecroDancer.exe+2F81E0]
+expense2_exit:
+jmp expense2_returnhere
+
+
+label(expense3_returnhere)
+label(expense3_originalcode)
+label(expense3_exit)
+expense3_newmem:
+add [storage+28], ecx
+expense3_originalcode:
+add ecx,[NecroDancer.exe+2F81E0]
+expense3_exit:
+jmp expense3_returnhere
+
+
+label(leprechaunspawn_function2)
+label(leprechaunspawn_if)
+label(leprechaunspawn_returnhere1)
+label(leprechaunspawn_returnhere2)
+leprechaunspawn_newmem:
+mov [storage+38], eax
+cmp eax,32
+jnge NecroDancer.exe+13E7A4
+jmp leprechaunspawn_returnhere1
+leprechaunspawn_function2:
+push eax
+mov eax, [storage+38]
+sub [storage+4], eax
+cmp [storage+20], 0
+je leprechaunspawn_if
+sub [storage+4], eax
+leprechaunspawn_if:
+pop eax
+call NecroDancer.exe+161720
+jmp leprechaunspawn_returnhere2
+
+
+label(richs_returnhere)
+label(richs_originalcode)
+label(richs_exit)
+richs_newmem:
+add [storage+2C], ecx
+cmp [storage+20], 0
+je richs_originalcode
+add [storage+2C], ecx
+richs_originalcode:
+call NecroDancer.exe+10FA50
+richs_exit:
+jmp richs_returnhere
+
+
+//------------
+"NecroDancer.exe"+BC002:
+jmp newgame_newmem
+newgame_returnhere:
+
+
+"NecroDancer.exe"+C0BE9:
+jmp boss_newmem
+boss_returnhere:
+
+
+"NecroDancer.exe"+134800:
+jmp foes_newmem
+foes_returnhere:
+
+
+"NecroDancer.exe"+147975:
+jmp giantfoes_newmem
+giantfoes_returnhere:
+
+
+"NecroDancer.exe"+16BB48:
+jmp goldenwalls_newmem
+goldenwalls_returnhere:
+
+
+"NecroDancer.exe"+16BA30:
+jmp goldendirt_newmem
+goldendirt_returnhere:
+
+
+"NecroDancer.exe"+60227:
+jmp lying_newmem
+lying_returnhere:
+
+
+"NecroDancer.exe"+6263C:
+jmp lying1_newmem
+lying1_returnhere:
+
+
+"NecroDancer.exe"+5DF5D:
+jmp lying4_newmem
+lying4_returnhere:
+
+
+"NecroDancer.exe"+15DCD3:
+call crate_newmem
+"NecroDancer.exe"+15DD10:
+call crate_newmem
+"NecroDancer.exe"+15DD4D:
+call crate_newmem
+"NecroDancer.exe"+15DD8A:
+call crate_newmem
+"NecroDancer.exe"+15DDC7:
+call crate_newmem
+
+
+"NecroDancer.exe"+16229D:
+jmp leprechaun_newmem
+leprechaun_returnhere:
+
+
+"NecroDancer.exe"+161DBD:
+jmp leprechaun2_newmem
+leprechaun2_returnhere:
+
+
+"NecroDancer.exe"+1A14F8:
+jmp pawnbroker_newmem
+pawnbroker_returnhere:
+
+
+"NecroDancer.exe"+1253CD:
+jmp penalty_newmem
+penalty_returnhere:
+
+
+"NecroDancer.exe"+108BA3:
+jmp expense_newmem
+nop
+expense_returnhere:
+
+
+"NecroDancer.exe"+177A1C:
+jmp expense2_newmem
+nop
+expense2_returnhere:
+
+
+"NecroDancer.exe"+FD5A0:
+jmp expense3_newmem
+nop
+expense3_returnhere:
+
+
+"NecroDancer.exe"+13E72C:
+jmp leprechaunspawn_newmem
+leprechaunspawn_returnhere1:
+"NecroDancer.exe"+13E796:
+jmp leprechaunspawn_function2
+leprechaunspawn_returnhere2:
+
+
+"NecroDancer.exe"+183C21:
+jmp richs_newmem
+richs_returnhere:
+
+
+[disable]
+//threadend:
+//dd 1
+
+
+"NecroDancer.exe"+BC002:
+call NecroDancer.exe+7DFC0
+
+
+"NecroDancer.exe"+C0BE9:
+push 00
+push ecx
+mov ecx,esp
+
+
+"NecroDancer.exe"+134800:
+push ebp
+mov ebp,esp
+push ebx
+push esi
+
+
+"NecroDancer.exe"+147975:
+call NecroDancer.exe+133060
+
+
+"NecroDancer.exe"+16BB48:
+call NecroDancer.exe+133060
+
+
+"NecroDancer.exe"+16BA30:
+call NecroDancer.exe+133060
+
+
+"NecroDancer.exe"+60227:
+push 00
+push ecx
+mov ecx,esp
+
+
+"NecroDancer.exe"+6263C:
+push 00
+push ecx
+mov ecx,esp
+
+
+"NecroDancer.exe"+5DF5D:
+push 00
+push ecx
+mov ecx,esp
+
+
+"NecroDancer.exe"+15DCD3:
+push necrodancer.exe+2861C4
+"NecroDancer.exe"+15DD10:
+push necrodancer.exe+2861C4
+"NecroDancer.exe"+15DD4D:
+push necrodancer.exe+2861C4
+"NecroDancer.exe"+15DD8A:
+push necrodancer.exe+2861C4
+"NecroDancer.exe"+15DDC7:
+push necrodancer.exe+2861C4
+
+
+"NecroDancer.exe"+16229D:
+call NecroDancer.exe+133060
+
+
+"NecroDancer.exe"+161DBD:
+call NecroDancer.exe+133060
+
+
+"NecroDancer.exe"+1A14F8:
+call NecroDancer.exe+147410
+
+
+"NecroDancer.exe"+1253CD:
+call NecroDancer.exe+103BB0
+
+
+"NecroDancer.exe"+108BA3:
+add ecx,[NecroDancer.exe+2F81E0]
+
+
+"NecroDancer.exe"+177A1C:
+add ecx,[NecroDancer.exe+2F81E0]
+
+
+"NecroDancer.exe"+FD5A0:
+add ecx,[NecroDancer.exe+2F81E0]
+
+
+"NecroDancer.exe"+13E72C:
+cmp eax,32
+jnge NecroDancer.exe+13E7A4
+"NecroDancer.exe"+13E796:
+call NecroDancer.exe+161720
+
+
+"NecroDancer.exe"+183C21:
+call NecroDancer.exe+10FA50
+
+
+"NecroDancer.exe"+146F44:
+db CC CC CC CC
+dealloc(storage)
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"Boss"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B0000"/>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>2</ID>
+          <Description>"Foes"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B0004"/>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+4</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>3</ID>
+          <Description>"Shop Wall"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B0008"/>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>7</ID>
+          <Description>"Hidden Gold in Dirt"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B000C"/>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+0C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>15</ID>
+          <Description>"Gold Lying on Map"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B0010"/>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+10</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>16</ID>
+          <Description>"Gold from Crates"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B0014"/>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+14</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>8</ID>
+          <Description>"Leprechaun Drop"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B0018"/>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+18</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>11</ID>
+          <Description>"Pawnbroker Drop"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B001C"/>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+1C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>17</ID>
+          <Description>"Riches Scroll"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B002C"/>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+2C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>6</ID>
+          <Description>"Crawn Penalty"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B0024"/>
+          <ShowAsSigned>1</ShowAsSigned>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+24</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>9</ID>
+          <Description>"Expense in Shop"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B0028"/>
+          <ShowAsSigned>1</ShowAsSigned>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+28</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>12</ID>
+          <Description>"Total"</Description>
+          <LastState Value="0" Activated="0" RealAddress="0D2B0034"/>
+          <ShowAsSigned>1</ShowAsSigned>
+          <Color>80000008</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>storage+34</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>5</ID>
+      <Description>"gold"</Description>
+      <LastState Value="0" Activated="0" RealAddress="012781E0"/>
+      <Color>80000008</Color>
+      <VariableType>4 Bytes</VariableType>
+      <Address>NecroDancer.exe+2F81E0</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>10</ID>
+      <Description>"multiplier"</Description>
+      <LastState Value="1" Activated="0" RealAddress="0127814C"/>
+      <Color>80000008</Color>
+      <VariableType>4 Bytes</VariableType>
+      <Address>NecroDancer.exe+2F814C</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>13</ID>
+      <Description>"replay speed"</Description>
+      <LastState Value="1" Activated="0" RealAddress="012785F4"/>
+      <Color>80000008</Color>
+      <VariableType>Float</VariableType>
+      <Address>necrodancer.exe+2F85F4</Address>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols>
+    <SymbolEntry>
+      <Name>threadend</Name>
+      <Address>0D2B00AE</Address>
+    </SymbolEntry>
+  </UserdefinedSymbols>
+  <Comments>Info about this table:
+</Comments>
+</CheatTable>
