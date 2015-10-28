@@ -136,6 +136,7 @@ namespace WindowsFormsApplication1
 					unknownversion = true;
 				if (unknownversion)
 				{
+					this.Text = "base:" + baseaddress.ToString("X");
 					timer1.Enabled = false;
 					MessageBox.Show("Unknown version of game detected. Please note that this version of analyzor may only supports steam v1.21 version of the game");
 					return;
