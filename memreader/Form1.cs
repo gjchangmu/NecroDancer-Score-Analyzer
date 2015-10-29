@@ -125,7 +125,7 @@ namespace memreader
 						continue;
 
 					int j;
-					for (j = 1; j < length - i; j++)
+					for (j = 5; j < length - i; j++)
 						if (rbuff[i + j] == rbuff2[i + j])
 							break;
 

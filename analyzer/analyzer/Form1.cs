@@ -34,11 +34,12 @@ namespace WindowsFormsApplication1
 		static extern int GetLastError();
 
 		const string title = "NecroDancer Score Analyzer v0.1";
-		const int oldbase = 0x1170000;
-		const int oldstorage = 0x15E0000;
+		const int oldbase = 0xC50000;
+		const int oldstorage = 0x6C0000;
 
 		List<int> codejumps;
 		List<int> storagejumps;
+		List<int> storageabs;
 		IntPtr processHandle = IntPtr.Zero;
 		IntPtr baseaddress;
 		IntPtr storage;
@@ -106,6 +107,14 @@ namespace WindowsFormsApplication1
 			storagejumps.Add(0x344);
 			storagejumps.Add(0x362);
 			storagejumps.Add(0x367);
+
+			storageabs = new List<int>();
+			storageabs.Add(0x236);  // push
+			storageabs.Add(0x289);  // imul
+			storageabs.Add(0x2E0);  // add ecx, necrodancer.exe+2F81E0
+			storageabs.Add(0x2F1);  // add ecx, necrodancer.exe+2F81E0
+			storageabs.Add(0x302);  // add ecx, necrodancer.exe+2F81E0
+
 		}
 
 		private void timer1_Tick(object sender, EventArgs e)
@@ -163,6 +172,14 @@ namespace WindowsFormsApplication1
 					int wbuffp = jmp + 1;
 					int oldadd = BitConverter.ToInt32(wbuff, wbuffp);
 					int offsetadd = oldstorage - (int)storage + (int)baseaddress - oldbase;
+					int newadd = oldadd + offsetadd;
+					BitConverter.GetBytes(newadd).CopyTo(wbuff, wbuffp);
+				}
+				foreach (int jmp in storageabs)
+				{
+					int wbuffp = jmp;
+					int oldadd = BitConverter.ToInt32(wbuff, wbuffp);
+					int offsetadd = (int)baseaddress - oldbase;
 					int newadd = oldadd + offsetadd;
 					BitConverter.GetBytes(newadd).CopyTo(wbuff, wbuffp);
 				}
