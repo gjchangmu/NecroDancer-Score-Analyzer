@@ -34,8 +34,8 @@ namespace WindowsFormsApplication1
 		static extern int GetLastError();
 
 		const string title = "NecroDancer Score Analyzer v0.1";
-		const int oldbase = 0xF80000;
-		const int oldstorage = 0x920000;
+		const int oldbase = 0x1170000;
+		const int oldstorage = 0x15E0000;
 
 		List<int> codejumps;
 		List<int> storagejumps;
@@ -152,7 +152,7 @@ namespace WindowsFormsApplication1
 				}
 
 				byte[] wbuff = new byte[0x1B0000];
-				FileStream fs = new FileStream(oldstorage.ToString("X") + ".bin", FileMode.Open);
+				FileStream fs = new FileStream("storage.bin", FileMode.Open);
 				if (fs == null)
 					return;
 				fs.Read(wbuff, 0, 2048);
@@ -181,28 +181,40 @@ namespace WindowsFormsApplication1
 					this.Text = "Write to storage " + storage.ToString() + " failed.";
 					return;
 				}
-				
-				fs = new FileStream("50000.bin", FileMode.Open);
+
+				byte[] diff = new byte[2048];
+				fs = new FileStream("dif.bin", FileMode.Open);
 				if (fs == null)
 					return;
-				fs.Read(wbuff, 0, 0x1B0000);
+				int difflength = fs.Read(diff, 0, 2048);
 				fs.Close();
+				for (int i = 0; i < difflength;)
+				{
+					int addr = BitConverter.ToInt32(diff, i);
+					int len = BitConverter.ToInt32(diff, i + 4);
+					for (int b = 0; b < len; b++)
+						wbuff[b] = diff[i + 8 + b];
+					ret = WriteProcessMemory(processHandle, (IntPtr)((int)baseaddress + addr), wbuff, len, ref rn);
+					i += 8 + len;
+				}
 				foreach (int jmp in codejumps)
 				{
-					int wbuffp = jmp - 0x50000 + 1;
-					int oldadd = BitConverter.ToInt32(wbuff, wbuffp);
+					ReadProcessMemory(processHandle, (IntPtr)((int)baseaddress + jmp + 1), wbuff, 4, ref rn);
+					int oldadd = BitConverter.ToInt32(wbuff, 0);
 					int offsetadd = (int)storage - oldstorage + oldbase - (int)baseaddress;
 					int newadd = oldadd + offsetadd;
-					BitConverter.GetBytes(newadd).CopyTo(wbuff, wbuffp);
+					BitConverter.GetBytes(newadd).CopyTo(wbuff, 0);
+					WriteProcessMemory(processHandle, (IntPtr)((int)baseaddress + jmp + 1), wbuff, 4, ref rn);
 				}
-				ret = WriteProcessMemory(processHandle, (IntPtr)((int)baseaddress + 0x50000), wbuff, 0x1B0000, ref rn);
+
+
 				if (!ret)
 				{
 					this.Text = "Write to 0x50000 failed.";
 					return;
 				}
-				
-				this.Text = "NecroDancer game detected."; 
+
+				this.Text = "NecroDancer game detected. storage=" + storage.ToString("X"); 
 			}
 
 

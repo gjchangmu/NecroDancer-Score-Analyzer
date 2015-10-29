@@ -1,7 +1,6 @@
-memreader/bin
-memreader/obj
-analyzer/analyzer/obj
-release
+/memreader/obj
+/analyzer/analyzer/obj
+/release
 
 *.pdb
 *.exp
