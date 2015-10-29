@@ -42,6 +42,7 @@ namespace WindowsFormsApplication1
 		IntPtr processHandle = IntPtr.Zero;
 		IntPtr baseaddress;
 		IntPtr storage;
+		int lastguessFoes = 0;
 
 		public Form1()
 		{
@@ -226,8 +227,7 @@ namespace WindowsFormsApplication1
 				processHandle = IntPtr.Zero;
 				return;
 			}
-			int iTotal = BitConverter.ToInt32(rbuff, 0);
-			lbTotal.Text = iTotal.ToString();
+			int realTotal = BitConverter.ToInt32(rbuff, 0);
 
 			ret = ReadProcessMemory(processHandle, storage, rbuff, 64, ref rn);
 			if (!ret)
@@ -238,8 +238,10 @@ namespace WindowsFormsApplication1
 			}
 			int iBoss = BitConverter.ToInt32(rbuff, 0x00);
 			lbBoss.Text = iBoss.ToString();
-			//int iFoes = BitConverter.ToInt32(rbuff, 0x04);
+			int iFoes = BitConverter.ToInt32(rbuff, 0x04);
 			//lbFoes.Text = iFoes.ToString();
+			if (iFoes == 0)
+				lastguessFoes = 0;
 			int iGoldenwall = BitConverter.ToInt32(rbuff, 0x08);
 			lbGoldenwall.Text = iGoldenwall.ToString();
 			int iGoldendirt = BitConverter.ToInt32(rbuff, 0x0C);
@@ -260,8 +262,12 @@ namespace WindowsFormsApplication1
 			lbRiches.Text = iRiches.ToString();
 			//int iTotal = BitConverter.ToInt32(rbuff, 0x34);
 			//lbTotal.Text = iTotal.ToString();
-			int iFoes = iTotal - iBoss - iGoldenwall - iGoldendirt - iLying - iCrate - iLeprechaun - iPawnbroker - iCrawn - iShop - iRiches;
-			lbFoes.Text = iFoes.ToString();
+			int guessFoes = realTotal - iBoss - iGoldenwall - iGoldendirt - iLying - iCrate - iLeprechaun - iPawnbroker - iCrawn - iShop - iRiches;
+			if (guessFoes > lastguessFoes)
+				lastguessFoes = guessFoes;
+            lbFoes.Text = Math.Max(guessFoes, lastguessFoes).ToString();
+			int iTotal = iBoss + lastguessFoes + iGoldenwall + iGoldendirt + iLying + iCrate + iLeprechaun + iPawnbroker + iCrawn + iShop + iRiches;
+			lbTotal.Text = iTotal.ToString();
 		}
 	}
 }
