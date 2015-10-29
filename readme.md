@@ -14,7 +14,8 @@ The numbers are not 100% accurate, however they should be good estimates, especi
 1. In a run you have touched the Crown of Greed but later you abandoned it.
 2. In a level you destroyed many golden walls but you didn't pick up the gold.
 3. You killed the boss in a boss level but you didn't pick up the rewarding gold.
-4. Maybe some other rare circumstances.
+4. You was hit by a leprechaun.
+5. Maybe some other rare circumstances.
 
 Why the numbers are not accurate? The main reason is that, most of the gold goes through two steps to end up into your score counter: firstly it spawns and lies on the ground, and secondly it is collected by you when you step onto it. The analyzer does not know where a pile of gold comes from when you are collecting it, so in order to analyze the sources of gold it count gold when the gold spawns. And when doing in this way, the analyzer does not know whether you will collect all the gold that have spawned, so it basically assumes that you will collect all of them. 
 
