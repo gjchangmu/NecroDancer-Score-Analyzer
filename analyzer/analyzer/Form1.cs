@@ -33,9 +33,9 @@ namespace WindowsFormsApplication1
 		[DllImport("kernel32.dll", SetLastError = true)]
 		static extern int GetLastError();
 
-		const string title = "NecroDancer Score Analyzer v0.1";
-		const int oldbase = 0xC50000;
-		const int oldstorage = 0x6C0000;
+		const string title = "NecroDancer Score Analyzer v0.2";
+		const int oldbase = 0xB90000;
+		const int oldstorage = 0x7B0000;
 
 		List<int> codejumps;
 		List<int> storagejumps;
@@ -94,26 +94,27 @@ namespace WindowsFormsApplication1
 			storagejumps.Add(0x25C);
 			storagejumps.Add(0x27C);
 			storagejumps.Add(0x281);
-			storagejumps.Add(0x2B4);
-			storagejumps.Add(0x2B9);
-			storagejumps.Add(0x2CE);
-			storagejumps.Add(0x2D3);
-			storagejumps.Add(0x2E4);
-			storagejumps.Add(0x2F5);
-			storagejumps.Add(0x306);
-			storagejumps.Add(0x314+1);
-			storagejumps.Add(0x31A);
-			storagejumps.Add(0x33F);
-			storagejumps.Add(0x344);
-			storagejumps.Add(0x362);
-			storagejumps.Add(0x367);
+			storagejumps.Add(0x2C3);
+			storagejumps.Add(0x2C8);
+			storagejumps.Add(0x2DD);
+			storagejumps.Add(0x2E2);
+			storagejumps.Add(0x2F3);
+			storagejumps.Add(0x304);
+			storagejumps.Add(0x315);
+			storagejumps.Add(0x323+1);
+			storagejumps.Add(0x329);
+			storagejumps.Add(0x34E);
+			storagejumps.Add(0x353);
+			storagejumps.Add(0x371);
+			storagejumps.Add(0x376);
 
 			storageabs = new List<int>();
 			storageabs.Add(0x236);  // push
-			storageabs.Add(0x289);  // imul
-			storageabs.Add(0x2E0);  // add ecx, necrodancer.exe+2F81E0
-			storageabs.Add(0x2F1);  // add ecx, necrodancer.exe+2F81E0
-			storageabs.Add(0x302);  // add ecx, necrodancer.exe+2F81E0
+			storageabs.Add(0x28C);  // cmp necrodancer.exe+FA116
+			storageabs.Add(0x298);  // imul
+			storageabs.Add(0x2EF);  // add ecx, necrodancer.exe+2F81E0
+			storageabs.Add(0x300);  // add ecx, necrodancer.exe+2F81E0
+			storageabs.Add(0x311);  // add ecx, necrodancer.exe+2F81E0
 
 		}
 

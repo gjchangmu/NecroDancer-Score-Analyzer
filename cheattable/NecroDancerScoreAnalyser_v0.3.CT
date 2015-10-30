@@ -4,7 +4,7 @@
     <CheatEntry>
       <ID>14</ID>
       <Description>"Disable Replay Speed Limit"</Description>
-      <LastState Activated="0"/>
+      <LastState Activated="1"/>
       <Color>80000008</Color>
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[enable]
@@ -23,7 +23,7 @@ db 0F 2F C8 76 0D
     <CheatEntry>
       <ID>0</ID>
       <Description>"Start"</Description>
-      <LastState Activated="0"/>
+      <LastState Activated="1"/>
       <Color>80000008</Color>
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[enable]
@@ -286,6 +286,9 @@ label(pawnbroker_exit)
 label(pawnbroker_if)
 pawnbroker_newmem:
 push eax
+mov eax, [esp+18]
+cmp eax, NecroDancer.exe+FA116
+je pawnbroker_if
 imul eax, [NecroDancer.exe+2F814C], 64
 add [storage+1C], eax
 sub [storage+04], eax
@@ -603,7 +606,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>1</ID>
           <Description>"Boss"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B0000"/>
+          <LastState Value="??" Activated="0" RealAddress="010F0000"/>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
           <Address>storage</Address>
@@ -611,7 +614,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>2</ID>
           <Description>"Foes"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B0004"/>
+          <LastState Value="??" Activated="0" RealAddress="010F0004"/>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
           <Address>storage+4</Address>
@@ -619,7 +622,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>3</ID>
           <Description>"Shop Wall"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B0008"/>
+          <LastState Value="??" Activated="0" RealAddress="010F0008"/>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
           <Address>storage+8</Address>
@@ -627,7 +630,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>7</ID>
           <Description>"Hidden Gold in Dirt"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B000C"/>
+          <LastState Value="??" Activated="0" RealAddress="010F000C"/>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
           <Address>storage+0C</Address>
@@ -635,7 +638,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>15</ID>
           <Description>"Gold Lying on Map"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B0010"/>
+          <LastState Value="??" Activated="0" RealAddress="010F0010"/>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
           <Address>storage+10</Address>
@@ -643,7 +646,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>16</ID>
           <Description>"Gold from Crates"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B0014"/>
+          <LastState Value="??" Activated="0" RealAddress="010F0014"/>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
           <Address>storage+14</Address>
@@ -651,7 +654,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>8</ID>
           <Description>"Leprechaun Drop"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B0018"/>
+          <LastState Value="??" Activated="0" RealAddress="010F0018"/>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
           <Address>storage+18</Address>
@@ -659,7 +662,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>11</ID>
           <Description>"Pawnbroker Drop"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B001C"/>
+          <LastState Value="??" Activated="0" RealAddress="010F001C"/>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
           <Address>storage+1C</Address>
@@ -667,7 +670,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>17</ID>
           <Description>"Riches Scroll"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B002C"/>
+          <LastState Value="??" Activated="0" RealAddress="010F002C"/>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
           <Address>storage+2C</Address>
@@ -675,7 +678,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>6</ID>
           <Description>"Crawn Penalty"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B0024"/>
+          <LastState Value="??" Activated="0" RealAddress="010F0024"/>
           <ShowAsSigned>1</ShowAsSigned>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
@@ -684,7 +687,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>9</ID>
           <Description>"Expense in Shop"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B0028"/>
+          <LastState Value="??" Activated="0" RealAddress="010F0028"/>
           <ShowAsSigned>1</ShowAsSigned>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
@@ -693,7 +696,7 @@ dealloc(storage)
         <CheatEntry>
           <ID>12</ID>
           <Description>"Total"</Description>
-          <LastState Value="0" Activated="0" RealAddress="0D2B0034"/>
+          <LastState Value="??" Activated="0" RealAddress="010F0034"/>
           <ShowAsSigned>1</ShowAsSigned>
           <Color>80000008</Color>
           <VariableType>4 Bytes</VariableType>
@@ -704,7 +707,7 @@ dealloc(storage)
     <CheatEntry>
       <ID>5</ID>
       <Description>"gold"</Description>
-      <LastState Value="0" Activated="0" RealAddress="012781E0"/>
+      <LastState Value="??" Activated="0" RealAddress="00000000"/>
       <Color>80000008</Color>
       <VariableType>4 Bytes</VariableType>
       <Address>NecroDancer.exe+2F81E0</Address>
@@ -712,7 +715,7 @@ dealloc(storage)
     <CheatEntry>
       <ID>10</ID>
       <Description>"multiplier"</Description>
-      <LastState Value="1" Activated="0" RealAddress="0127814C"/>
+      <LastState Value="??" Activated="0" RealAddress="00000000"/>
       <Color>80000008</Color>
       <VariableType>4 Bytes</VariableType>
       <Address>NecroDancer.exe+2F814C</Address>
@@ -720,10 +723,28 @@ dealloc(storage)
     <CheatEntry>
       <ID>13</ID>
       <Description>"replay speed"</Description>
-      <LastState Value="1" Activated="0" RealAddress="012785F4"/>
+      <LastState Value="??" Activated="0" RealAddress="00000000"/>
       <Color>80000008</Color>
       <VariableType>Float</VariableType>
       <Address>necrodancer.exe+2F85F4</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>18</ID>
+      <Description>"No description"</Description>
+      <LastState Value="??" Activated="0" RealAddress="010F0040"/>
+      <ShowAsHex>1</ShowAsHex>
+      <Color>80000008</Color>
+      <VariableType>4 Bytes</VariableType>
+      <Address>storage+40</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>19</ID>
+      <Description>"No description"</Description>
+      <LastState Value="??" Activated="0" RealAddress="010F0044"/>
+      <ShowAsHex>1</ShowAsHex>
+      <Color>80000008</Color>
+      <VariableType>4 Bytes</VariableType>
+      <Address>storage+44</Address>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols>
