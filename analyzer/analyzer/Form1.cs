@@ -33,7 +33,7 @@ namespace WindowsFormsApplication1
 		[DllImport("kernel32.dll", SetLastError = true)]
 		static extern int GetLastError();
 
-		const string title = "NecroDancer Score Analyzer v0.2";
+		const string title = "NecroDancer Score Analyzer v0.3";
 		const int oldbase = 0xB90000;
 		const int oldstorage = 0x7B0000;
 

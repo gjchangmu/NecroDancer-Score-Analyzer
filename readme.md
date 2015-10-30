@@ -1,7 +1,7 @@
 ###Introduction
-NecroDancer Score Analyzer is a trainer for a video game named Crypt of the NecroDancer. It counts the amount of gold/score by different sources (gold from bosses, gold from non-boss monsters, gold from golden shop walls, penalty by crown of greed, etc.). This trainer helps me understand my score better.
+NecroDancer Score Analyzer is a trainer for a video game named Crypt of the NecroDancer. It counts the amount of gold/score by different sources (gold from bosses, gold from non-boss monsters, gold from golden shop walls, penalty by crown of greed, etc). This trainer helps me understand my score better.
 
-This is in beta status and any kind of suggestions are welcome.
+Only Windows Steam version of the game is supported. This is in beta status and any kind of suggestions are welcome. 
 
 ###How to use
 Run the analyzer side by side with the game. 
