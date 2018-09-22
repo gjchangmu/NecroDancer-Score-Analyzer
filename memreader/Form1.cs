@@ -18,6 +18,9 @@ namespace memreader
 		[DllImport("kernel32.dll")]
 		public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
+		[DllImport("kernel32.dll")]
+		public static extern IntPtr CloseHandle(IntPtr handle);
+
 		[DllImport("Kernel32.dll")]
 		static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int nSize, ref int lpNumberOfBytesRead);
 
@@ -84,6 +87,7 @@ namespace memreader
 				FileStream fs = new FileStream("mem.bin", FileMode.Create);
 				fs.Write(rbuff, 0, length);
 				fs.Close();
+				CloseHandle(processHandle);
 			}
 			else
 			{
@@ -135,6 +139,7 @@ namespace memreader
 					i += j;
 				}
 				fs.Close();
+				CloseHandle(processHandle);
 			}
 			else
 			{

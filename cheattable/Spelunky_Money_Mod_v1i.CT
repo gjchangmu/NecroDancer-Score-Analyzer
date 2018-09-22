@@ -1,0 +1,1496 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="27">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>1</ID>
+      <Description>"options"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+
+alloc(newmem,2048)
+registersymbol(newmem)
+label(returnhere)
+label(originalcode)
+label(exit)
+label(enter_nrandom)
+label(j1_nrandom)
+label(wrong_nrandom)
+
+alloc(newmem_restart,2048)
+label(returnhere_restart)
+label(originalcode_restart)
+label(exit_restart)
+label(do1)
+label(break1)
+
+alloc(newmem_address,2048)
+label(returnhere_address)
+label(originalcode_address)
+label(exit_address)
+
+//----- when adding the level number
+
+newmem:
+// call rand() many times
+push eax
+push ebx
+push ecx
+cmp [newmem+620],0
+jne break1
+mov [newmem+620],1
+mov ebx,[spelunky.exe+69C01]
+add ebx,[spelunky.exe+69C02]
+add ebx,[spelunky.exe+69C03]
+add ebx,newmem
+add ebx,newmem_restart
+shr ebx,#16
+and ebx,000000FF
+do1:
+call rand
+dec ebx
+cmp ebx,0
+je break1
+jmp do1
+break1:
+pop ecx
+pop ebx
+pop eax
+
+push esi
+mov esi,[spelunky.exe+69C01]
+add esi,edi
+
+// original code
+originalcode:
+add [esi],eax
+
+// non-endless: random levels
+enter_nrandom:
+cmp [newmem+0510],01
+jne wrong_nrandom
+push eax
+push ecx
+push edx
+call rand
+xor edx,edx
+mov ecx,#20
+div ecx
+mov [esi],edx
+pop edx
+pop ecx
+pop eax
+cmp [esi],#16
+je enter_nrandom
+cmp [esi],0
+je enter_nrandom
+inc [newmem+610]
+cmp [newmem+610],#25
+je j1_nrandom
+jmp wrong_nrandom
+j1_nrandom:
+mov [esi],#16
+mov [newmem+610],0
+wrong_nrandom:
+
+pop esi
+exit:
+jmp returnhere
+
+"Spelunky.exe"+69C15:
+jmp newmem
+nop
+returnhere:
+
+//----- when starting a new run
+
+newmem_restart:
+
+mov [newmem+610],0  // reset the mod level counter
+mov [esi+0044592C],#5000  // give initial money
+
+originalcode_restart:
+mov edi,00000004
+
+exit_restart:
+jmp returnhere_restart
+
+"Spelunky.exe"+63B99:
+jmp newmem_restart
+returnhere_restart:
+
+//----- when starting a new level and recording address
+
+newmem_address:
+
+originalcode_address:
+mov [ecx+30],eax
+fld dword ptr [eax+30]
+
+// record the money pointer
+push eax
+push ebx
+mov eax,Spelunky.exe+138558
+mov eax,[eax]
+mov eax,[eax+30]
+mov eax,[eax+280]
+lea ebx,[eax+5298]
+mov [newmem+650],ebx
+lea ebx,[eax+88]
+mov [newmem+654],ebx
+pop ebx
+pop eax
+
+exit_address:
+jmp returnhere_address
+
+"Spelunky.exe"+651AD:
+jmp newmem_address
+nop
+returnhere_address:
+
+[disable]
+//"Spelunky.exe"+69C15:
+//add [edi+Spelunky.exe+1905D4],eax
+
+//-----
+
+"Spelunky.exe"+63B99:
+mov edi,00000004
+
+//-----
+"Spelunky.exe"+651AD:
+mov [ecx+30],eax
+fld dword ptr [eax+30]
+
+{$Lua}
+if syntaxcheck then return end
+for i=memrec.Count-1,0,-1 do
+  memrec[i].Active = false
+end
+{$Asm}
+
+unregistersymbol(newmem)
+dealloc(newmem)
+dealloc(newmem_restart)
+dealloc(newmem_address)
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>20</ID>
+          <Description>"endless: loop to mine before Olmec"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[enable]
+{$Lua}
+if syntaxcheck then return end
+local addressList = getAddressList()
+local mrdamagetaken = addressList.getMemoryRecordByDescription('options')
+for i=mrdamagetaken.Count-1,0,-1 do
+  mrdamagetaken[i].Active = false
+end
+{$Asm}
+
+newmem+0500:
+db 01 00 00 00
+newmem+610:
+db 00 00 00 00
+
+[disable]
+newmem+0500:
+db 00 00 00 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>21</ID>
+          <Description>"endless: random levels"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[enable]
+{$Lua}
+if syntaxcheck then return end
+local addressList = getAddressList()
+local mrdamagetaken = addressList.getMemoryRecordByDescription('options')
+for i=mrdamagetaken.Count-1,0,-1 do
+  mrdamagetaken[i].Active = false
+end
+{$Asm}
+
+newmem+0504:
+db 01 00 00 00
+newmem+610:
+db 00 00 00 00
+
+[disable]
+newmem+0504:
+db 00 00 00 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>22</ID>
+          <Description>"non-endless: 24 random levels before Olmec"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[enable]
+{$Lua}
+if syntaxcheck then return end
+local addressList = getAddressList()
+local mrdamagetaken = addressList.getMemoryRecordByDescription('options')
+for i=mrdamagetaken.Count-1,0,-1 do
+  mrdamagetaken[i].Active = false
+end
+{$Asm}
+
+newmem+0510:
+db 01 00 00 00
+
+[disable]
+newmem+0510:
+db 00 00 00 00
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>27</ID>
+      <Description>"Gold"</Description>
+      <LastState Value="5000" RealAddress="0D1AF94C"/>
+      <VariableType>4 Bytes</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>5298</Offset>
+        <Offset>280</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>16</ID>
+      <Description>"Hold Item"</Description>
+      <LastState Value="0" RealAddress="0D1AA73C"/>
+      <VariableType>4 Bytes</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>88</Offset>
+        <Offset>280</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>71</ID>
+      <Description>"Cape"</Description>
+      <LastState Value="0" RealAddress="0D1AA732"/>
+      <VariableType>Byte</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>7E</Offset>
+        <Offset>280</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>24</ID>
+      <Description>"Jetpack"</Description>
+      <LastState Value="0" RealAddress="0D1AA726"/>
+      <VariableType>Byte</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>72</Offset>
+        <Offset>280</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>25</ID>
+      <Description>"Jetpack Gas Pointer"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>144</Offset>
+        <Offset>238</Offset>
+        <Offset>230</Offset>
+        <Offset>238</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>75</ID>
+      <Description>"Cape In Effect?"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>274</Offset>
+        <Offset>238</Offset>
+        <Offset>230</Offset>
+        <Offset>238</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>49</ID>
+      <Description>"Stun Delay"</Description>
+      <LastState Value="0" RealAddress="0D2566FC"/>
+      <VariableType>4 Bytes</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>184</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>54</ID>
+      <Description>"X Velocity"</Description>
+      <LastState Value="0" RealAddress="0D2567BC"/>
+      <VariableType>Float</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>244</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>81</ID>
+      <Description>"Y Velocity?"</Description>
+      <LastState Value="0" RealAddress="0D2567C0"/>
+      <VariableType>Float</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>248</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>36</ID>
+      <Description>"Y Position"</Description>
+      <LastState Value="98" RealAddress="0D2565AC"/>
+      <VariableType>Float</VariableType>
+      <Address>Spelunky.exe+138558</Address>
+      <Offsets>
+        <Offset>34</Offset>
+        <Offset>30</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>74</ID>
+      <Description>"jetpack gas need money"</Description>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+
+alloc(newmem_jetpackgas,2048)
+label(returnhere_jetpackgas)
+label(originalcode_jetpackgas)
+label(exit_jetpackgas)
+label(notenough)
+
+newmem_jetpackgas:
+push ebx
+mov ebx,[newmem+650]
+cmp [ebx],#30
+jl notenough
+sub [ebx],#30
+jmp originalcode_jetpackgas
+notenough:
+mov [esi+00000144],#100
+
+originalcode_jetpackgas:
+add [esi+00000144],eax
+
+exit_jetpackgas:
+pop ebx
+jmp returnhere_jetpackgas
+
+"Spelunky.exe"+54CC1:
+jmp newmem_jetpackgas
+nop
+returnhere_jetpackgas:
+
+//----- disable refill
+
+alloc(newmem_norefill,2048)
+label(returnhere_norefill)
+label(originalcode_norefill)
+label(exit_norefill)
+
+newmem_norefill:
+push ecx
+mov ecx,[newmem+650]
+cmp [ecx],#30
+jl exit_norefill
+
+originalcode_norefill:
+mov [esi+00000144],ebx
+
+exit_norefill:
+pop ecx
+jmp returnhere_norefill
+
+"Spelunky.exe"+54D02:
+jmp newmem_norefill
+nop
+returnhere_norefill:
+
+
+
+
+[disable]
+
+"Spelunky.exe"+54CC1:
+add [esi+00000144],eax
+
+//-----
+
+"Spelunky.exe"+54D02:
+mov [esi+00000144],ebx
+
+dealloc(newmem_jetpackgas)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>76</ID>
+      <Description>"cape usage need money"</Description>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+
+alloc(newmem_capeuse,2048)
+label(returnhere_capeuse)
+label(originalcode_capeuse)
+label(exit_capeuse)
+
+newmem_capeuse:
+push eax
+mov eax,[newmem+650]
+cmp [eax],#1000
+jl exit_capeuse
+sub [eax],#1000
+
+originalcode_capeuse:
+mov [esi+00000274],ebx
+
+exit_capeuse:
+pop eax
+jmp returnhere_capeuse
+
+"Spelunky.exe"+54E33:
+jmp newmem_capeuse
+nop
+returnhere_capeuse:
+
+
+[disable]
+
+"Spelunky.exe"+54E33:
+mov [esi+00000274],ebx
+
+dealloc(newmem_capeuse)
+
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>77</ID>
+      <Description>"whip need money"</Description>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+
+alloc(newmem_whip,2048)
+label(returnhere_whip)
+label(originalcode_whip)
+label(exit_whip)
+label(enough_whip)
+
+newmem_whip:
+push eax
+mov eax,[newmem+650]
+cmp [eax],#2000
+jge enough_whip
+pop eax
+jmp spelunky.exe+55E6D
+
+enough_whip:
+sub [eax],#2000
+pop eax
+
+originalcode_whip:
+lea eax,[edx+07]
+mov ecx,edi
+
+exit_whip:
+jmp returnhere_whip
+
+"Spelunky.exe"+55D9F:
+jmp newmem_whip
+returnhere_whip:
+
+
+[disable]
+
+"Spelunky.exe"+55D9F:
+lea eax,[edx+07]
+mov ecx,edi
+
+dealloc(newmem_whip)
+
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>78</ID>
+      <Description>"weapons need money"</Description>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+
+alloc(newmem_weapon,2048)
+label(returnhere_weapon)
+label(originalcode_weapon)
+label(exit_weapon)
+label(enough_weapon)
+
+newmem_weapon:
+// check: putting down or using
+push eax
+mov eax,[ebp-2c]
+and eax,FF000000
+cmp eax,42000000
+pop eax
+je originalcode_weapon
+
+// check: holding item
+push eax
+push ebx
+push ecx
+mov ebx,0
+mov eax,[newmem+654]
+cmp [eax],#510 // mattock
+mov ecx,#1000
+cmove ebx,ecx
+cmp [eax],#511 // boomerang
+mov ecx,#1000
+cmove ebx,ecx
+cmp [eax],#512 // machete
+mov ecx,#500
+cmove ebx,ecx
+cmp [eax],#514 // webgun
+mov ecx,#100
+cmove ebx,ecx
+cmp [eax],#515 // shotgun
+mov ecx,#2000
+cmove ebx,ecx
+cmp [eax],#516 // freeze gun
+mov ecx,#2000
+cmove ebx,ecx
+cmp [eax],#517 // cannon
+mov ecx,#100
+cmove ebx,ecx
+cmp [eax],#518 // camera
+mov ecx,#100
+cmove ebx,ecx
+cmp [eax],#519 // teleporter
+mov ecx,#500
+cmove ebx,ecx
+
+mov eax,[newmem+650]
+cmp [eax],ebx
+jge enough_weapon
+pop ecx
+pop ebx
+pop eax
+jmp spelunky.exe+55EB6
+
+enough_weapon:
+sub [eax],ebx
+pop ecx
+pop ebx
+pop eax
+
+originalcode_weapon:
+call Spelunky.exe+338C0
+
+exit_weapon:
+jmp returnhere_weapon
+
+"Spelunky.exe"+55EAC:
+jmp newmem_weapon
+returnhere_weapon:
+
+
+[disable]
+
+"Spelunky.exe"+55EAC:
+call Spelunky.exe+338C0
+
+dealloc(newmem_weapon)
+
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>80</ID>
+      <Description>"can't walk on ground"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+
+alloc(newmem_nowalk,2048)
+label(returnhere_nowalk)
+label(originalcode_nowalk)
+label(exit_nowalk)
+
+newmem_nowalk:
+push eax
+mov eax,Spelunky.exe+138558
+mov eax,[eax]
+mov eax,[eax+30]
+mov eax,[eax+238]
+mov eax,[eax+230]
+mov eax,[eax+238]
+mov eax,[eax+144]
+cmp eax,0
+pop eax
+jne originalcode_nowalk
+
+fstp dword ptr [newmem_nowalk+500]
+jmp exit_nowalk
+
+originalcode_nowalk:
+fstp dword ptr [edi+00000244]
+
+exit_nowalk:
+jmp returnhere_nowalk
+
+"Spelunky.exe"+557BE:
+jmp newmem_nowalk
+nop
+returnhere_nowalk:
+
+
+[disable]
+
+"Spelunky.exe"+557BE:
+fstp dword ptr [edi+00000244]
+
+dealloc(newmem_nowalk)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>84</ID>
+      <Description>"can't walk on ground 2"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+
+alloc(newmem_nowalk,2048)
+label(returnhere_nowalk)
+label(originalcode_nowalk)
+label(exit_nowalk)
+
+newmem_nowalk+500:
+db 99 99 19 3F
+
+newmem_nowalk:
+fmul dword ptr [newmem_nowalk+500]
+
+originalcode_nowalk:
+fstp dword ptr [edi+00000244]
+
+exit_nowalk:
+jmp returnhere_nowalk
+
+"Spelunky.exe"+557BE:
+jmp newmem_nowalk
+nop
+returnhere_nowalk:
+
+
+[disable]
+
+"Spelunky.exe"+557BE:
+fstp dword ptr [edi+00000244]
+
+dealloc(newmem_nowalk)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>85</ID>
+      <Description>"jump on ground need money"</Description>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+
+alloc(newmem_jump,2048)
+label(returnhere_jump)
+label(originalcode_jump)
+label(exit_jump)
+label(enough_jump)
+
+newmem_jump+500:
+db 99 99 19 3F
+
+newmem_jump:
+push eax
+mov eax,[newmem+650]
+cmp [eax],#500
+jge enough_jump
+pop eax
+fmul dword ptr [newmem_jump+500]
+jmp originalcode_jump
+
+enough_jump:
+sub [eax],#500
+pop eax
+
+originalcode_jump:
+fstp dword ptr [edi+00000248]
+
+exit_jump:
+jmp returnhere_jump
+
+"Spelunky.exe"+55C37:
+jmp newmem_jump
+nop
+returnhere_jump:
+
+
+[disable]
+
+"Spelunky.exe"+55C37:
+fstp dword ptr [edi+00000248]
+
+dealloc(newmem_jump)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>82</ID>
+      <Description>"can't jump on ground"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[enable]
+
+spelunky.exe+12b43c:
+db 99 99 19 3F
+
+[disable]
+
+spelunky.exe+12b43c:
+db 9A 99 99 3F
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>72</ID>
+      <Description>"Debug"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>73</ID>
+          <Description>"money address"</Description>
+          <LastState Value="5000" RealAddress="0D1AF94C"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>newmem+650</Address>
+          <Offsets>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>79</ID>
+          <Description>"holding item address"</Description>
+          <LastState Value="0" RealAddress="0D1AA73C"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>newmem+654</Address>
+          <Offsets>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>83</ID>
+      <Description>"No description"</Description>
+      <LastState Value="1.200000048" RealAddress="00C3B43C"/>
+      <VariableType>Float</VariableType>
+      <Address>spelunky.exe+12b43c</Address>
+    </CheatEntry>
+  </CheatEntries>
+  <CheatCodes>
+    <CodeEntry>
+      <Description>Change of mov [edi+000000A1],al</Description>
+      <Address>003254C8</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>754C8</ModuleNameOffset>
+      <Before>
+        <Byte>3D</Byte>
+        <Byte>00</Byte>
+        <Byte>D9</Byte>
+        <Byte>5F</Byte>
+        <Byte>54</Byte>
+      </Before>
+      <Actual>
+        <Byte>88</Byte>
+        <Byte>87</Byte>
+        <Byte>A1</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>88</Byte>
+        <Byte>87</Byte>
+        <Byte>11</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov [edi+00000211],al</Description>
+      <Address>003254CE</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>754CE</ModuleNameOffset>
+      <Before>
+        <Byte>87</Byte>
+        <Byte>A1</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>88</Byte>
+        <Byte>87</Byte>
+        <Byte>11</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>88</Byte>
+        <Byte>9F</Byte>
+        <Byte>F9</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov [edi+000001F9],bl</Description>
+      <Address>003254D4</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>754D4</ModuleNameOffset>
+      <Before>
+        <Byte>87</Byte>
+        <Byte>11</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>88</Byte>
+        <Byte>9F</Byte>
+        <Byte>F9</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>88</Byte>
+        <Byte>87</Byte>
+        <Byte>00</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov [edi+00000200],al</Description>
+      <Address>003254DA</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>754DA</ModuleNameOffset>
+      <Before>
+        <Byte>9F</Byte>
+        <Byte>F9</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>88</Byte>
+        <Byte>87</Byte>
+        <Byte>00</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>89</Byte>
+        <Byte>87</Byte>
+        <Byte>68</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov [edi+00000168],eax</Description>
+      <Address>003254E0</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>754E0</ModuleNameOffset>
+      <Before>
+        <Byte>87</Byte>
+        <Byte>00</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>89</Byte>
+        <Byte>87</Byte>
+        <Byte>68</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>88</Byte>
+        <Byte>9F</Byte>
+        <Byte>F2</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov [edi+000001F2],bl</Description>
+      <Address>003254E6</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>754E6</ModuleNameOffset>
+      <Before>
+        <Byte>87</Byte>
+        <Byte>68</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>88</Byte>
+        <Byte>9F</Byte>
+        <Byte>F2</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>88</Byte>
+        <Byte>87</Byte>
+        <Byte>94</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov [edi+00000294],al</Description>
+      <Address>003254EC</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>754EC</ModuleNameOffset>
+      <Before>
+        <Byte>9F</Byte>
+        <Byte>F2</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>88</Byte>
+        <Byte>87</Byte>
+        <Byte>94</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>E9</Byte>
+        <Byte>9B</Byte>
+        <Byte>60</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+11D30</Description>
+      <Address>002C17E5</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>117E5</ModuleNameOffset>
+      <Before>
+        <Byte>3D</Byte>
+        <Byte>00</Byte>
+        <Byte>D9</Byte>
+        <Byte>5F</Byte>
+        <Byte>40</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>46</Byte>
+        <Byte>05</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>B7</Byte>
+        <Byte>30</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of jmp dword ptr [eax*4+Spelunky.exe+7B614]</Description>
+      <Address>0031FD52</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>6FD52</ModuleNameOffset>
+      <Before>
+        <Byte>83</Byte>
+        <Byte>00</Byte>
+        <Byte>BA</Byte>
+        <Byte>32</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>FF</Byte>
+        <Byte>24</Byte>
+        <Byte>85</Byte>
+        <Byte>14</Byte>
+        <Byte>B6</Byte>
+        <Byte>32</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>68</Byte>
+        <Byte>2C</Byte>
+        <Byte>03</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+54B90</Description>
+      <Address>003021D3</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>521D3</ModuleNameOffset>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>75</Byte>
+        <Byte>0D</Byte>
+        <Byte>8B</Byte>
+        <Byte>C5</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>B8</Byte>
+        <Byte>29</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>3D</Byte>
+        <Byte>B4</Byte>
+        <Byte>84</Byte>
+        <Byte>3E</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+6FD10</Description>
+      <Address>00305DE3</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>55DE3</ModuleNameOffset>
+      <Before>
+        <Byte>47</Byte>
+        <Byte>30</Byte>
+        <Byte>D9</Byte>
+        <Byte>1C</Byte>
+        <Byte>24</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>28</Byte>
+        <Byte>9F</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>D9</Byte>
+        <Byte>05</Byte>
+        <Byte>9C</Byte>
+        <Byte>B4</Byte>
+        <Byte>3D</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+16660</Description>
+      <Address>00305E4B</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>55E4B</ModuleNameOffset>
+      <Before>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>8B</Byte>
+        <Byte>CF</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>10</Byte>
+        <Byte>08</Byte>
+        <Byte>FC</Byte>
+        <Byte>FF</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>97</Byte>
+        <Byte>34</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+BA170</Description>
+      <Address>00305FBB</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>55FBB</ModuleNameOffset>
+      <Before>
+        <Byte>BA</Byte>
+        <Byte>0C</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>B0</Byte>
+        <Byte>41</Byte>
+        <Byte>06</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>84</Byte>
+        <Byte>C0</Byte>
+        <Byte>0F</Byte>
+        <Byte>84</Byte>
+        <Byte>95</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+BA170</Description>
+      <Address>0030616E</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>5616E</ModuleNameOffset>
+      <Before>
+        <Byte>BA</Byte>
+        <Byte>0D</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>FD</Byte>
+        <Byte>3F</Byte>
+        <Byte>06</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>84</Byte>
+        <Byte>C0</Byte>
+        <Byte>0F</Byte>
+        <Byte>84</Byte>
+        <Byte>32</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+BA170</Description>
+      <Address>003062D1</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>562D1</ModuleNameOffset>
+      <Before>
+        <Byte>BA</Byte>
+        <Byte>0F</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>9A</Byte>
+        <Byte>3E</Byte>
+        <Byte>06</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>84</Byte>
+        <Byte>C0</Byte>
+        <Byte>0F</Byte>
+        <Byte>84</Byte>
+        <Byte>42</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+B6C50</Description>
+      <Address>00302128</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>52128</ModuleNameOffset>
+      <Before>
+        <Byte>BA</Byte>
+        <Byte>FC</Byte>
+        <Byte>90</Byte>
+        <Byte>3B</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>23</Byte>
+        <Byte>4B</Byte>
+        <Byte>06</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>C7</Byte>
+        <Byte>85</Byte>
+        <Byte>5C</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of push eax</Description>
+      <Address>00302113</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>52113</ModuleNameOffset>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>8B</Byte>
+        <Byte>4F</Byte>
+        <Byte>4C</Byte>
+      </Before>
+      <Actual>
+        <Byte>50</Byte>
+      </Actual>
+      <After>
+        <Byte>E8</Byte>
+        <Byte>17</Byte>
+        <Byte>4A</Byte>
+        <Byte>06</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+B6B30</Description>
+      <Address>00302114</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>52114</ModuleNameOffset>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>8B</Byte>
+        <Byte>4F</Byte>
+        <Byte>4C</Byte>
+        <Byte>90</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>17</Byte>
+        <Byte>4A</Byte>
+        <Byte>06</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>0D</Byte>
+        <Byte>B4</Byte>
+        <Byte>84</Byte>
+        <Byte>3E</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+62080</Description>
+      <Address>0030210B</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>5210B</ModuleNameOffset>
+      <Before>
+        <Byte>BB</Byte>
+        <Byte>80</Byte>
+        <Byte>9A</Byte>
+        <Byte>3B</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>70</Byte>
+        <Byte>FF</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>4F</Byte>
+        <Byte>4C</Byte>
+        <Byte>50</Byte>
+        <Byte>E8</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+12380</Description>
+      <Address>00302286</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>52286</ModuleNameOffset>
+      <Before>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>8B</Byte>
+        <Byte>C5</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>F5</Byte>
+        <Byte>00</Byte>
+        <Byte>FC</Byte>
+        <Byte>FF</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>C5</Byte>
+        <Byte>E8</Byte>
+        <Byte>7E</Byte>
+        <Byte>31</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+16260</Description>
+      <Address>00305DA4</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>55DA4</ModuleNameOffset>
+      <Before>
+        <Byte>8D</Byte>
+        <Byte>42</Byte>
+        <Byte>07</Byte>
+        <Byte>8B</Byte>
+        <Byte>CF</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>B7</Byte>
+        <Byte>04</Byte>
+        <Byte>FC</Byte>
+        <Byte>FF</Byte>
+      </Actual>
+      <After>
+        <Byte>D9</Byte>
+        <Byte>47</Byte>
+        <Byte>34</Byte>
+        <Byte>8B</Byte>
+        <Byte>8F</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of call Spelunky.exe+BA170</Description>
+      <Address>00305D45</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>55D45</ModuleNameOffset>
+      <Before>
+        <Byte>BA</Byte>
+        <Byte>0A</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>E8</Byte>
+        <Byte>26</Byte>
+        <Byte>44</Byte>
+        <Byte>06</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>84</Byte>
+        <Byte>C0</Byte>
+        <Byte>0F</Byte>
+        <Byte>84</Byte>
+        <Byte>49</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of fstp dword ptr [edi+00000244]</Description>
+      <Address>000C57BE</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>557BE</ModuleNameOffset>
+      <Before>
+        <Byte>87</Byte>
+        <Byte>44</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>D9</Byte>
+        <Byte>9F</Byte>
+        <Byte>44</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>E9</Byte>
+        <Byte>21</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of fstp dword ptr [edi+00000248]</Description>
+      <Address>000C5C37</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>55C37</ModuleNameOffset>
+      <Before>
+        <Byte>0D</Byte>
+        <Byte>3C</Byte>
+        <Byte>B4</Byte>
+        <Byte>19</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>D9</Byte>
+        <Byte>9F</Byte>
+        <Byte>48</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>74</Byte>
+        <Byte>20</Byte>
+        <Byte>8B</Byte>
+        <Byte>87</Byte>
+        <Byte>28</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of jne Spelunky.exe+54CD9</Description>
+      <Address>000C4CAB</Address>
+      <ModuleName>Spelunky.exe</ModuleName>
+      <ModuleNameOffset>54CAB</ModuleNameOffset>
+      <Before>
+        <Byte>86</Byte>
+        <Byte>74</Byte>
+        <Byte>02</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>75</Byte>
+        <Byte>2C</Byte>
+      </Actual>
+      <After>
+        <Byte>D9</Byte>
+        <Byte>05</Byte>
+        <Byte>E8</Byte>
+        <Byte>B3</Byte>
+        <Byte>19</Byte>
+      </After>
+    </CodeEntry>
+  </CheatCodes>
+  <UserdefinedSymbols/>
+</CheatTable>
