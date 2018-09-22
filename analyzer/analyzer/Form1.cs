@@ -57,6 +57,7 @@ namespace WindowsFormsApplication1
 			codejumps.Add(0x63B99);
 			codejumps.Add(0X651AD);
 			codejumps.Add(0X54CC1);
+			codejumps.Add(0X54D02);
 			codejumps.Add(0X54E33);
 			codejumps.Add(0X55D9F);
 			codejumps.Add(0X55EAC);
