@@ -33,24 +33,25 @@ namespace WindowsFormsApplication1
 		[DllImport("kernel32.dll", SetLastError = true)]
 		static extern int GetLastError();
 
-		const string title = "NecroDancer Score Analyzer v0.3";
-		const int oldbase = 0x80000;
-		const int oldstorage = 0x02800000;
+		const int oldbase = 0x1210000;
+		const int oldstorage = 0x0EF50000;
 
 		List<int> codejumps;
 		List<int> storagejumps;
 		List<int> storageabs;
+		List<int> randcalls;
+		Process process;
 		IntPtr processHandle = IntPtr.Zero;
 		IntPtr baseaddress;
+		IntPtr randaddress = IntPtr.Zero;
 		IntPtr storage;
 		int lastguessFoes = 0;
 
 		public Form1()
 		{
 			InitializeComponent();
-			this.Text = title;
 
-			// list here addresses of all jump command from inside the original game code to newmem ??
+			// list here addresses of all jump command from inside the original game code to newmem
 			codejumps = new List<int>();
 			codejumps.Add(0X69C15);
 			codejumps.Add(0x63B99);
@@ -61,9 +62,9 @@ namespace WindowsFormsApplication1
 			codejumps.Add(0X55EAC);
 			codejumps.Add(0X55C37);
 
-			// list here addresses of all jump command from newmem to inside the original game code ??
+			// list here addresses of all jump command from newmem to inside the original game code
 			storagejumps = new List<int>();
-			storagejumps.Add(0xB6);
+			storagejumps.Add(0x82);
 			storagejumps.Add(0x1019);
 			storagejumps.Add(0x2032);
 			storagejumps.Add(0x3029);
@@ -74,16 +75,21 @@ namespace WindowsFormsApplication1
 			storagejumps.Add(0x70B0);
 			storagejumps.Add(0x70BA);
 			storagejumps.Add(0x70BF);
-			storagejumps.Add(0x802B);
+			storagejumps.Add(0x8041);
 
 
-			// list here addresses of reference to inside the original game code in newmem ??
+			// list here addresses of reference to inside the original game code in newmem
 			storageabs = new List<int>();
-			storageabs.Add(0x1C);
-			storageabs.Add(0x22);
-			storageabs.Add(0x28);
-			storageabs.Add(0x58);
+			storageabs.Add(0x03);
+			storageabs.Add(0x1D);
+			storageabs.Add(0x23);
+			storageabs.Add(0x29);
 			storageabs.Add(0x2009);
+
+			// list here all rand() calls
+			randcalls = new List<int>();
+			randcalls.Add(0x41);
+			randcalls.Add(0x70);
 
 		}
 
@@ -98,10 +104,21 @@ namespace WindowsFormsApplication1
 				if (Ps.Length == 0)
 					return;
 				System.Threading.Thread.Sleep(1000);
-				processHandle = OpenProcess(0x0038, false, Ps[0].Id);
+				process = Ps[0];
+				processHandle = OpenProcess(0x0038, false, process.Id);
 				if (processHandle == IntPtr.Zero)
 					return;
-				baseaddress = Ps[0].MainModule.BaseAddress;
+				baseaddress = process.MainModule.BaseAddress;
+
+				foreach (ProcessModule module in process.Modules)
+				{
+					Console.WriteLine(module.ModuleName);
+					if (module.ModuleName.Contains("msvcrt.dll"))
+					{
+						randaddress = (IntPtr)((int)module.BaseAddress + 0x5c2e0);
+						break;
+					}
+				}
 
 				/*
 				bool unknownversion = false;
@@ -136,10 +153,10 @@ namespace WindowsFormsApplication1
 				if (storage == IntPtr.Zero)
 				{
 					int error = GetLastError();
-					this.Text = "Alloc failed, " + error.ToString();
+					lbStatus.Text = "Alloc failed, " + error.ToString();
 					return;
 				}
-				
+
 				foreach (int jmp in storagejumps)
 				{
 					int wbuffp = jmp + 1;
@@ -156,6 +173,11 @@ namespace WindowsFormsApplication1
 					int newadd = oldadd + offsetadd;
 					BitConverter.GetBytes(newadd).CopyTo(wbuff, wbuffp);
 				}
+				foreach (int rand in randcalls)
+				{
+					int wbuffp = rand + 1;
+					//BitConverter.GetBytes((int)randaddress).CopyTo(wbuff, wbuffp);
+				}
 				for (int i = 0; i < newmemlength - 4; i++)
 				{
 					int oldadd = BitConverter.ToInt32(wbuff, i);
@@ -169,7 +191,7 @@ namespace WindowsFormsApplication1
 				ret = WriteProcessMemory(processHandle, storage, wbuff, newmemlength, ref rn);
 				if (!ret)
 				{
-					this.Text = "Write to storage " + storage.ToString() + " failed.";
+					lbStatus.Text = "Write to storage " + storage.ToString() + " failed.";
 					return;
 				}
 
@@ -201,11 +223,36 @@ namespace WindowsFormsApplication1
 
 				if (!ret)
 				{
-					this.Text = "Write to 0x50000 failed.";
+					lbStatus.Text = "Write to 0x50000 failed.";
 					return;
 				}
 
-				this.Text = "Spelunky game detected. newmem=" + storage.ToString("X"); 
+				lbStatus.Text = "Spelunky game detected. newmem=" + storage.ToString("X");
+			}
+			else
+			{
+				if (process.HasExited)
+				{
+					processHandle = IntPtr.Zero;
+					process = null;
+					lbStatus.Text = "Waiting for game process...";
+				}
+			}
+		}
+
+		private void cbRandom_CheckedChanged(object sender, EventArgs e)
+		{
+			byte[] wbuff = new byte[4];
+			int rn = 0;
+			if (cbRandom.Checked && processHandle != IntPtr.Zero)
+			{
+				BitConverter.GetBytes(1).CopyTo(wbuff, 0);
+				WriteProcessMemory(processHandle, (IntPtr)((int)storage + 0x510), wbuff, 4, ref rn);
+			}
+			else if (!cbRandom.Checked && processHandle != IntPtr.Zero)
+			{
+				BitConverter.GetBytes(0).CopyTo(wbuff, 0);
+				WriteProcessMemory(processHandle, (IntPtr)((int)storage + 0x510), wbuff, 4, ref rn);
 			}
 		}
 	}
